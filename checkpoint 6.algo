@@ -1,0 +1,105 @@
+FUNCTION number_nodes(Bi_tree STRUCT) : INTEGER
+VAR
+    nb : INTEGER 
+BEGIN
+    IF (Bi_tree = NULL) THEN
+        RETURN 0 ;
+    END_IF
+    nb:=0;
+    IF ((Bi_tree.LC <> null) OR (Bi_tree.RC <> null)  ) THEN
+        nb:= nb+1;
+    END_IF
+    nb:= nb+ number_nodes(Bi_tree->LC)+ number_nodes(Bi_tree->RC) ;
+    RETURN nb ;
+END
+
+FUNCTION height_tree(Bi_tree) : INTEGER
+VAR
+    LH,RH : INTEGER :=0 ;
+BEGIN
+    IF (Bi_tree=NULL) THEN
+        RETURN 0 ;
+     ELSE
+     LH = height_tree(Bi_tree->LC);  
+     RH = height_tree(Bi_tree->RC); 
+     IF (LH>RH) THEN
+      RETURN LH+1 ;
+     ELSE
+        RETURN RH+1 ;
+     END_IF  
+    END_IF
+   
+END
+
+FUNCTION number_leaves(Bi_tree : STRUCT): INTEGER
+
+BEGIN
+    IF (Bi_tree = NULL) THEN
+        RETURN 0 ;
+    ELSE_IF (Bi_tree.LC= NULL AND Bi_tree.RC=NULL) THEN
+        RETURN 1 ;
+    ELSE
+       RETURN number_leaves(Bi_tree->LC)+ number_leaves(Bi_tree->RC);
+    END_IF
+    
+END
+FUNCTION maximum(Bi_tree : STRUCT) : INTEGER
+VAR
+    max,Lmax,Rmax:=INTEGER ;
+BEGIN
+    IF (Bi_tree = NULL) THEN
+        RETURN -1 ;
+    ELSE
+    max := Bi_tree.VAL ;
+    Lmax :=maximum(Bi_tree->LC) ;
+    Rmax :=maximum(Bi_tree->RC) ;
+    IF (lmax>max) THEN
+        max := Lmax;
+    END_IF
+    IF (Rmax>max) THEN
+        max := Rmax;
+    END_IF
+    RETURN max ;
+END
+
+FUNCTION is_full(Bi_tree : STRUCT) : BOOLEAN
+
+BEGIN
+    IF (Bi_tree = NULL) THEN
+        RETURN true ;
+    END_IF
+    IF (Bi_tree.LC = NULL AND Bi_tree.RC = NULL ) THEN
+        RETURN true ; 
+    END_IF
+    IF ((Bi_tree.LC <> NULL) AND (Bi_tree.RC <> NULL))  THEN
+        RETURN is_full(Bi_tree->LC) AND is_full(Bi_tree->RC); 
+    END_IF
+    RETURN false ;
+END
+
+ALGORITHM  Tree basic operations 
+VAR
+    Bi_tree :   STRUCT
+                VAL : data; 
+                LC : ^Bi_tree; 
+                RC : ^Bi_tree; 
+            END_STRUCT
+ x,y,z,max : INTEGER;
+ b:= BOOLEAN ;
+BEGIN
+    x:= number_nodes(Bi_tree);
+    write('the number of nodes in this binary tree is : ',x) ; 
+    y:= height_tree(Bi_tree);
+    write('the height of this binary tree is : ',y) ;
+    z:= number_leaves(Bi_tree);
+    write('the number of leaves in this binary tree is : ',z) ; 
+    max:= maximum(Bi_tree);
+    write('the maximum value in this binary tree is : ',max) ; 
+ b:= is_full(Bi_tree);
+ IF (b=true) THEN
+    write('this tree is full binary');
+  ELSE
+    write('this tree is not full binary');
+  END_IF  
+     
+END
